@@ -5,10 +5,11 @@ class Calculator {
   constructor() {
     this.lastCalculation = undefined;
     this.currentInput = '';
+    this.waitingForInput = true;
   }
 
   operator(operator) {
-    if (operator === '-' && this.currentInput.length === 0) {
+    if (operator === '-' && this.waitingForInput) {
       return this.input(operator);
     } else if (!isNaN(this.currentInput)) {
       return this.newCalculation(operator);
@@ -31,6 +32,7 @@ class Calculator {
     }
 
     this.currentInput = '';
+    this.waitingForInput = true;
     return this.lastCalculation.getResult();
   }
 
@@ -47,6 +49,10 @@ class Calculator {
   }
 
   input(input) {
+    if (this.waitingForInput) {
+      this.waitingForInput = false;
+    }
+
     if (input === '0' && (this.currentInput === '0' || this.currentInput === '-0')) {
       return this.currentInput;
     }
